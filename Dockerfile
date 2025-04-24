@@ -1,9 +1,9 @@
-# Use an official Python base image
+# Use an official lightweight Python base image
 FROM python:3.10-slim
 
 # Set environment variables
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
@@ -11,17 +11,20 @@ RUN apt-get update && apt-get install -y \
     libopus-dev \
     libffi-dev \
     build-essential \
+    git \
     && apt-get clean
 
-# Set work directory
+# Set working directory
 WORKDIR /app
 
-# Install Python dependencies
+# Copy dependency list
 COPY requirements.txt .
+
+# Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy project files
+# Copy bot files
 COPY . .
 
-# Start the bot
+# Run the bot
 CMD ["python", "main.py"]
